@@ -50,16 +50,20 @@ class DGCNN(nn.Module):
 
         self.conv1 = nn.Sequential(nn.Conv2d(6, 64, kernel_size=1, bias=False),
                                    self.bn1,
-                                   nn.LeakyReLU(negative_slope=0.2))
+                                   nn.ReLU())
+                                   # nn.LeakyReLU(negative_slope=0.2))
         self.conv2 = nn.Sequential(nn.Conv2d(64*2, 64, kernel_size=1, bias=False),
                                    self.bn2,
-                                   nn.LeakyReLU(negative_slope=0.2))
+                                   nn.ReLU())
+                                   # nn.LeakyReLU(negative_slope=0.2))
         self.conv3 = nn.Sequential(nn.Conv2d(64*2, 64, kernel_size=1, bias=False),
                                    self.bn3,
-                                   nn.LeakyReLU(negative_slope=0.2))
+                                   nn.ReLU())
+                                   # nn.LeakyReLU(negative_slope=0.2))
         self.conv4 = nn.Sequential(nn.Conv2d(64*2, 64, kernel_size=1, bias=False),
                                    self.bn4,
-                                   nn.LeakyReLU(negative_slope=0.2))
+                                   nn.ReLU())
+                                   # nn.LeakyReLU(negative_slope=0.2))
         
         self.conv_skip = nn.Conv2d(64*4, 64, kernel_size=1, bias=False)  # skip connection layer
         # self.conv4 = nn.Sequential(nn.Conv2d(128*2, 256, kernel_size=1, bias=False),
