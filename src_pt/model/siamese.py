@@ -13,10 +13,10 @@ class SiameseNet(nn.Module):
         self.bn2 = nn.BatchNorm2d(64)
         self.conv_a = nn.Sequential(nn.Conv2d(256, 128, kernel_size=1, bias=False),
                                    self.bn1,
-                                   nn.ReLU())
+                                   nn.LeakyReLU())
         self.conv_b = nn.Sequential(nn.Conv2d(128*2, 64, kernel_size=1, bias=False),
                                    self.bn2,
-                                   nn.ReLU())
+                                   nn.LeakyReLU())
         
         self.conv_skip = nn.Conv1d(128, 128, kernel_size=1, bias=False)
         self.conv1 = nn.Conv1d(192, 128, kernel_size=1, bias=False)
@@ -24,7 +24,7 @@ class SiameseNet(nn.Module):
         self.fc = nn.Sequential(
             nn.Linear(256, 64),
             nn.BatchNorm1d(64),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
             nn.Dropout(0.2),
             nn.Linear(64, 1)
         )
