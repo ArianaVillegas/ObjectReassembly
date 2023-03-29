@@ -8,10 +8,8 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR, ReduceLROnPlateau
 from torchvision.ops import sigmoid_focal_loss
-
 from torchmetrics.classification import BinaryF1Score, BinaryConfusionMatrix, BinaryAUROC
 from torch.utils.tensorboard import SummaryWriter
-
 from sklearn.model_selection import KFold
 
 from src_pt.dataloader import BreakingBad, ModelNet40
