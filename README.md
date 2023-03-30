@@ -1,1 +1,4 @@
-# ObjectReassembly
+# Object Reassembly
+
+The proposed method is a 3D object reconstruction architecture that involves two main steps: matching and orientation. This architecture aims to create a complete 3D object from a set of fractured faces, using visual features and geometrical properties to determine which fragments should be joined together. The process is carried out iteratively between pairs of fragments until the object is complete or until there is no pair of fractured faces with a score greater than a defined threshold. The orientation step involves rotating and translating the fragments to form a complete 3D object. The details of the matching and orientation steps are explained in the following sections. Figure \ref{fig:2} illustrates the general process of the proposed method, highlighting the key steps involved. This architecture has potential applications in fields such as robotics, computer graphics, and medical imaging.
+
