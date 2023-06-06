@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from src_pt.model.extractor import DGCNN, get_graph_feature
+from src.model.extractor import DGCNN, get_graph_feature
 
 class SiameseNet(nn.Module):
     def __init__(self, args):

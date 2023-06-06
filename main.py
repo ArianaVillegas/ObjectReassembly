@@ -14,10 +14,10 @@ from torch.utils.tensorboard import SummaryWriter
 
 from sklearn.model_selection import KFold
 
-from src_pt.dataloader import BreakingBad, ModelNet40
-from src_pt.model import SiameseNet
+from src.dataloader import BreakingBad, ModelNet40
+from src.model import SiameseNet
 
-from src_pt.config import get_cfg_defaults
+from src.config import get_cfg_defaults
 
 
 
