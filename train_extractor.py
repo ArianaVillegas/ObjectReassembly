@@ -101,15 +101,6 @@ def train(args, io):
     test_loader = DataLoader(ModelNet40(partition='test', data_dir=data_dir, num_points=args.data.num_points), num_workers=8,
                              batch_size=args.exp.test_batch_size, shuffle=True, drop_last=False)
     device = torch.device("cuda" if args.cuda else "cpu")
-
-    # if args.model.extractor == 'pointnet':
-    #     model = PointNet(args.model).to(device)
-    # elif args.model.extractor == 'dgcnn':
-    #     model = DGCNN(args.model).to(device)
-    # elif args.model.extractor == 'dgcnn_orig':
-    #     model = DGCNN_ORIG(args.model).to(device)
-    # else:
-    #     raise Exception("Not implemented")
     
     model = get_model(args.model).to(device)
     total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -163,15 +154,6 @@ def test(args, io):
     test_loader = DataLoader(ModelNet40(partition='test', data_dir=data_dir, num_points=args.data.num_points),
                              batch_size=args.exp.test_batch_size, shuffle=True, drop_last=False)
     device = torch.device("cuda" if args.cuda else "cpu")
-
-    # if args.model.extractor == 'pointnet':
-    #     model = PointNet(args.model).to(device)
-    # elif args.model.extractor == 'dgcnn':
-    #     model = DGCNN(args.model).to(device)
-    # elif args.model.extractor == 'dgcnn_orig':
-    #     model = DGCNN_ORIG(args.model).to(device)
-    # else:
-    #     raise Exception("Not implemented")
     
     model = get_model(args.model).to(device)
     model = nn.DataParallel(model)

@@ -7,8 +7,8 @@ def transform(pcd):
     centroid = np.mean(pcd, axis=0)
     pcd = pcd - centroid[None]
     # Rotate pointcloud
-    # rot_mat = R.random().as_matrix()
-    # pcd = (rot_mat @ pcd.T).T
+    rot_mat = R.random().as_matrix()
+    pcd = (rot_mat @ pcd.T).T
     # Translate pointcloud
     xyz1 = np.random.uniform(low=2./3., high=3./2., size=[3])
     xyz2 = np.random.uniform(low=-0.2, high=0.2, size=[3])  

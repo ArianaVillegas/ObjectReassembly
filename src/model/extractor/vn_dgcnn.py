@@ -145,7 +145,7 @@ class VN_DGCNN(nn.Module):
         self.std_feature = VNStdFeature(256//3*2, dim=4, normalize_frame=False)
         
         self.mlp = nn.Sequential(
-            nn.Linear(512, 256),
+            nn.Linear((256//3)*12, 256),
             nn.BatchNorm1d(256),
             nn.LeakyReLU(inplace=True),
             nn.Dropout(args.dropout),
@@ -186,7 +186,7 @@ class VN_DGCNN(nn.Module):
         x = self.conv5(x5)
         x = self.pool5(x)
         
-        x = self.conv6(x5)
+        x = self.conv6(x)
         num_points = x.size(-1)
         x_mean = x.mean(dim=-1, keepdim=True).expand(x.size())
         x = torch.cat((x, x_mean), 1)
