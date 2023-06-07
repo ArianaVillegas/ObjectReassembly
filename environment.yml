@@ -1,0 +1,17 @@
+name: torch
+channels:
+  - defaults
+dependencies:
+  - pytorch
+  - numpy
+  - torchmetrics
+  - pandas
+  - torchvision
+  - scikit-learn
+  - tensorboard
+  - h5py
+  - yacs
+  - pytorch-cuda=11.7
+  - torchaudio
+  - trimesh
+prefix: /home/avillegas/.conda/envs/torch
