@@ -160,4 +160,4 @@ class VN_PointNet(nn.Module):
         x = F.relu(self.bn2(self.dropout(self.fc2(x))))
         x = self.fc3(x)
         x = F.log_softmax(x, dim=1)
-        return x, trans_feat
+        return x
