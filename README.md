@@ -53,3 +53,4 @@ MIT License
 We would like to acknowledge the following repositories for their code contributions, which we have utilized in our project:
 + [PointNet/DGCNN](https://github.com/WangYueFt/dgcnn)
 + [PointNet++](https://github.com/yanx27/Pointnet_Pointnet2_pytorch)
++ [VN_PointNet/VN_DGCNN](https://github.com/FlyingGiraffe/vnn)
