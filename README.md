@@ -2,7 +2,7 @@
 
 ## **0. Create environment**
 ~~~
-conda create ...
+conda env export > environment.yml
 ~~~
 
 ## **1. Extractor training**
