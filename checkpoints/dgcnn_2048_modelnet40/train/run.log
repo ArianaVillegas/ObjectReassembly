@@ -1,0 +1,72 @@
+Namespace(cfg_file='config/extractor/train_extractor_dgcnn.yml', use_sgd=True, no_cuda=False, eval=False, model_path=None)
+Using GPU : 0 from 2 devices
+DGCNN_ORIG(
+  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (bn2): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (bn3): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (bn4): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (bn5): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (conv1): Sequential(
+    (0): Conv2d(6, 64, kernel_size=(1, 1), stride=(1, 1), bias=False)
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.2)
+  )
+  (conv2): Sequential(
+    (0): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1), bias=False)
+    (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.2)
+  )
+  (conv3): Sequential(
+    (0): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.2)
+  )
+  (conv4): Sequential(
+    (0): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+    (1): BatchNorm2d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.2)
+  )
+  (conv5): Sequential(
+    (0): Conv1d(512, 1024, kernel_size=(1,), stride=(1,), bias=False)
+    (1): BatchNorm1d(1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): LeakyReLU(negative_slope=0.2)
+  )
+  (linear1): Linear(in_features=2048, out_features=512, bias=False)
+  (bn6): BatchNorm1d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (dp1): Dropout(p=0.5, inplace=False)
+  (linear2): Linear(in_features=512, out_features=256, bias=True)
+  (bn7): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (dp2): Dropout(p=0.5, inplace=False)
+  (linear3): Linear(in_features=256, out_features=40, bias=True)
+)
+NUMBER OF TRAINABLE PARAMS: 1809576
+SGD (
+Parameter Group 0
+    dampening: 0
+    differentiable: False
+    foreach: None
+    initial_lr: 0.1
+    lr: 0.1
+    maximize: False
+    momentum: 0.9
+    nesterov: False
+    weight_decay: 0.0001
+)
+Train 0, loss: 3.512710, train acc: 0.149125, train avg acc: 0.071139
+Test 0, loss: 3.123813, test acc: 0.248784, test avg acc: 0.153500
+Train 1, loss: 3.092232, train acc: 0.248575, train avg acc: 0.127721
+Test 1, loss: 2.954463, test acc: 0.264182, test avg acc: 0.177488
+Train 2, loss: 2.977170, train acc: 0.292651, train avg acc: 0.161459
+Test 2, loss: 2.908242, test acc: 0.324959, test avg acc: 0.239169
+Train 3, loss: 2.904013, train acc: 0.325631, train avg acc: 0.191427
+Test 3, loss: 2.766656, test acc: 0.357374, test avg acc: 0.263860
+Train 4, loss: 2.852443, train acc: 0.349349, train avg acc: 0.207110
+Test 4, loss: 2.916459, test acc: 0.285656, test avg acc: 0.203267
+Train 5, loss: 2.769958, train acc: 0.372557, train avg acc: 0.232680
+Test 5, loss: 2.767142, test acc: 0.358185, test avg acc: 0.270570
+Train 6, loss: 2.726081, train acc: 0.397089, train avg acc: 0.255926
+Test 6, loss: 2.619675, test acc: 0.415721, test avg acc: 0.314494
+Train 7, loss: 2.669055, train acc: 0.413375, train avg acc: 0.270190
+Test 7, loss: 2.527216, test acc: 0.467180, test avg acc: 0.371977
+Train 8, loss: 2.626748, train acc: 0.434039, train avg acc: 0.294226
+Test 8, loss: 2.722568, test acc: 0.367909, test avg acc: 0.288994

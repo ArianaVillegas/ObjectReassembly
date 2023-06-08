@@ -60,3 +60,5 @@ Parameter Group 0
 )
 Train 0, loss: 3.279185, train acc: 0.215493, train avg acc: 0.114128
 Test 0, loss: 2.959484, test acc: 0.267423, test avg acc: 0.195709
+Train 1, loss: 2.890303, train acc: 0.329296, train avg acc: 0.197691
+Test 1, loss: 2.659082, test acc: 0.413290, test avg acc: 0.289692
