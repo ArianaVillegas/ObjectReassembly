@@ -1,18 +1,21 @@
 import os
+import time
 import argparse
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.optim.lr_scheduler import CosineAnnealingLR, ReduceLROnPlateau, StepLR
-import numpy as np
 from torch.utils.data import DataLoader
+import numpy as np
 import sklearn.metrics as metrics
 
 
 from src.config import get_cfg_defaults
 from src.dataloader import ModelNet40
-from src.model.extractor import PointNet, DGCNN, DGCNN_ORIG, VN_DGCNN, VN_DGCNN_ORIG, cal_loss
+from src.model.extractor import PointNet, PointNet2, DGCNN, DGCNN_ORIG, VN_PointNet, VN_DGCNN, VN_DGCNN_ORIG
+from src.model.extractor import cal_loss
 from src.utils.checkpoints import IOStream, SaveBestModel, checkpoint_init
+
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -23,10 +26,14 @@ data_dir = os.path.join(BASE_DIR, 'data/extractor')
 def get_model(model_args):
     if model_args.extractor == 'pointnet':
         model = PointNet(model_args)
+    elif model_args.extractor == 'pointnet2':
+        model = PointNet2(model_args)
     elif model_args.extractor == 'dgcnn':
         model = DGCNN(model_args)
     elif model_args.extractor == 'dgcnn_orig':
         model = DGCNN_ORIG(model_args)
+    elif model_args.extractor == 'vn_pointnet':
+        model = VN_PointNet(model_args)
     elif model_args.extractor == 'vn_dgcnn':
         model = VN_DGCNN(model_args)
     elif model_args.extractor == 'vn_dgcnn_orig':
@@ -116,31 +123,31 @@ def train(args, io):
         model.load_state_dict(best_model_cp['model_state_dict'])
         print(f"Best model loaded, its was saved at {best_model_epoch} epochs\n")
     
-    if cfg.opt.name == 'SGD':
-        opt = optim.SGD(model.parameters(), lr=cfg.opt.lr, momentum=args.opt.gamma, weight_decay=cfg.opt.weight_decay)
-    elif cfg.opt.name == 'Adam':
-        opt = optim.Adam(model.parameters(), lr=cfg.opt.lr, weight_decay=cfg.opt.weight_decay)
-    elif cfg.opt.name == 'Adadelta':
-        opt = optim.Adadelta(model.parameters(), lr=cfg.opt.lr, weight_decay=cfg.opt.weight_decay)
+    if args.opt.name == 'SGD':
+        opt = optim.SGD(model.parameters(), lr=args.opt.lr, momentum=args.opt.gamma, weight_decay=args.opt.weight_decay)
+    elif args.opt.name == 'Adam':
+        opt = optim.Adam(model.parameters(), lr=args.opt.lr, weight_decay=args.opt.weight_decay)
+    elif args.opt.name == 'Adadelta':
+        opt = optim.Adadelta(model.parameters(), lr=args.opt.lr, weight_decay=args.opt.weight_decay)
     else:
         raise Exception('Optmizer not implemented')
     
-    if cfg.opt.scheduler == 'ReduceLROnPlateau':
-        scheduler = ReduceLROnPlateau(opt, patience=1, verbose=True, factor=cfg.opt.gamma)
-    elif cfg.opt.scheduler == 'StepLR':
-        scheduler = StepLR(opt, step_size=1, gamma=cfg.opt.gamma, verbose=True)
-    elif cfg.opt.scheduler == 'CosineAnnealingLR':
+    if args.opt.scheduler == 'ReduceLROnPlateau':
+        scheduler = ReduceLROnPlateau(opt, patience=1, verbose=True, factor=args.opt.gamma)
+    elif args.opt.scheduler == 'StepLR':
+        scheduler = StepLR(opt, step_size=1, gamma=args.opt.gamma, verbose=True)
+    elif args.opt.scheduler == 'CosineAnnealingLR':
         scheduler = CosineAnnealingLR(opt, args.exp.epochs, eta_min=args.opt.lr_min, verbose=True)
     io.cprint(str(opt))
     
-    if cfg.model.loss == 'cal_loss':
+    if args.model.loss == 'cal_loss':
         criterion = cal_loss
-    elif cfg.model.loss == 'cross_entropy_loss':
+    elif args.model.loss == 'cross_entropy_loss':
         criterion = nn.CrossEntropyLoss()
     else:
         raise Exception('Loss criterion not implemented')
 
-    save_best_model = SaveBestModel(dir=BASE_DIR, name=cfg.exp.name, asc=True)
+    save_best_model = SaveBestModel(dir=BASE_DIR, name=args.exp.name, asc=True)
     for epoch in range(args.exp.epochs):
         scheduler.step()
         
@@ -163,12 +170,18 @@ def test(args, io):
     print(f"Best model loaded, its was saved at {best_model_epoch} epochs\n")
     
     model = model.eval()
+    torch.cuda.synchronize()
+    t0 = time.time()
     test_loss, test_acc, test_acc_avg = test_step(model, test_loader, device, None, 'accum', io, log_loss=False)
+    torch.cuda.synchronize()
+    t1 = time.time()
+    time_str = "Test time: " + ((t1-t0) * 1000) + " ms \tDataset: " + len(test_loader.dataset) + " \tForward time: " + ((t1-t0) * 1000 / len(test_loader.dataset)) + "\n"
+    io.cprint(time_str)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Feature extractor')
-    parser.add_argument('--cfg_file', default='config/train_extractor.yml', type=str)
+    parser.add_argument('--cfg_file', default='config/extractor/train_extractor_ours.yml', type=str)
     parser.add_argument('--use_sgd', type=bool, default=True,
                         help='Use SGD')
     parser.add_argument('--no_cuda', type=bool, default=False,
@@ -188,13 +201,14 @@ if __name__ == "__main__":
         cfg.model_path = None
     else:
         cfg.model_path = os.path.join(BASE_DIR, args.model_path)
-    
     print(cfg)
 
-    checkpoint_init(cfg.exp.name)
+    exp_name = f'{cfg.exp.name}_{cfg.data.name}'
+    cfg.exp.name = exp_name
+    checkpoint_init(exp_name)
 
     path = f"/{'test' if args.eval else 'train'}/run.log"
-    io = IOStream('checkpoints/' + cfg.exp.name + path)
+    io = IOStream('checkpoints/' + exp_name + path)
     io.cprint(str(args))
 
     cfg.cuda = not args.no_cuda and torch.cuda.is_available()

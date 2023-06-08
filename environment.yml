@@ -1,6 +1,9 @@
 name: torch
 channels:
   - defaults
+  - pytorch
+  - conda-forge
+  - anaconda
 dependencies:
   - pytorch
   - numpy
@@ -14,4 +17,3 @@ dependencies:
   - pytorch-cuda=11.7
   - torchaudio
   - trimesh
-prefix: /home/avillegas/.conda/envs/torch

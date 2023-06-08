@@ -146,4 +146,4 @@ venv.bak/
 /data/extractor
 
 # Checkpoints
-/checkpoints*/
+# /checkpoints*/

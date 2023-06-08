@@ -2,7 +2,7 @@
 vn_dgcnn.py
 The file has the original implementation of VN DGCCN and our proposed reduced version.
 
-This code includes parts copied from vn_dgcnn_cls.py and vn_dgcnn_util.py
+This code includes parts copied from vn_dgcnn_cls.py and utils/vn_dgcnn_util.py
 
 Original Code Repository: https://github.com/FlyingGiraffe/vnn/blob/master/models/vn_dgcnn_cls.py
                           https://github.com/FlyingGiraffe/vnn/blob/master/models/utils/vn_dgcnn_util.py
