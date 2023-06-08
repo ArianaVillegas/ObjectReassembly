@@ -12,6 +12,6 @@ module load miniconda/3.0
 eval "$(conda shell.bash hook)"
 conda activate torch
 
-python train_extractor.py --cfg_file=config/extractor/train_extractor_dgcnn.yml
+python train_extractor.py --cfg_file=config/extractor/train_extractor_ours.yml
 
 conda deactivate
