@@ -62,3 +62,7 @@ Train 13, loss: 3.049808, train acc: 0.258042, train avg acc: 0.133205
 Test 13, loss: 2.940104, test acc: 0.278363, test avg acc: 0.176750
 Train 14, loss: 3.041515, train acc: 0.259874, train avg acc: 0.136579
 Test 14, loss: 3.000165, test acc: 0.249595, test avg acc: 0.169000
+Train 15, loss: 3.051273, train acc: 0.257940, train avg acc: 0.133380
+Test 15, loss: 2.978269, test acc: 0.246759, test avg acc: 0.159291
+Train 16, loss: 3.035005, train acc: 0.268933, train avg acc: 0.140331
+Test 16, loss: 2.995909, test acc: 0.227715, test avg acc: 0.156500
