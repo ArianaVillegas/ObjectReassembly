@@ -45,3 +45,11 @@ For more information about the command-line arguments, run:
 ~~~
 python feature_extractor.py --help
 ~~~
+
+## License
+MIT License
+
+## Acknowledgement
+We would like to acknowledge the following repositories for their code contributions, which we have utilized in our project:
++ [PointNet/DGCNN](https://github.com/WangYueFt/dgcnn)
++ [PointNet++](https://github.com/yanx27/Pointnet_Pointnet2_pytorch)
