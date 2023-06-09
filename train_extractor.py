@@ -175,7 +175,7 @@ def test(args, io):
     test_loss, test_acc, test_acc_avg = test_step(model, test_loader, device, None, 'accum', io, log_loss=False)
     torch.cuda.synchronize()
     t1 = time.time()
-    time_str = "Test time: " + ((t1-t0) * 1000) + " ms \tDataset: " + len(test_loader.dataset) + " \tForward time: " + ((t1-t0) * 1000 / len(test_loader.dataset)) + "\n"
+    time_str = "Test time: " + str((t1-t0) * 1000) + " ms \tDataset: " + str(len(test_loader.dataset)) + " \tForward time: " + str(((t1-t0) * 1000 / len(test_loader.dataset))) + "\n"
     io.cprint(time_str)
 
 
