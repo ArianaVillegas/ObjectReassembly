@@ -400,3 +400,5 @@ Train 161, loss: 1.626410, train acc: 0.884874, train avg acc: 0.840279
 Test 161, loss: 1.570144, test acc: 0.887763, test avg acc: 0.842529
 Train 162, loss: 1.620462, train acc: 0.888945, train avg acc: 0.845339
 Test 162, loss: 1.584415, test acc: 0.880470, test avg acc: 0.852477
+Train 163, loss: 1.618935, train acc: 0.889862, train avg acc: 0.842100
+Test 163, loss: 1.593107, test acc: 0.873177, test avg acc: 0.826041
