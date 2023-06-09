@@ -18,7 +18,8 @@ Our network architecture for fragment matching utilizes the reduced DGCNN as a f
 </p>
 
 ## **Data Preparation**
-+ Reduced DGCNN: Follow instructions in [get_modelnet.md](data/get_modelnet.md).
++ ModelNet: Follow instructions in [get_modelnet.md](data/get_modelnet.md).
++ Breaking Bad: Follow instructions in [get_breaking_bad.md](data/get_breaking_bad.md).
 
 ## **Usage**
 ### **0. Create environment**
