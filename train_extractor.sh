@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=vn_dgcnn     # nombre del job
+#SBATCH --job-name=ours     # nombre del job
 #SBATCH --nodes=1                # cantidad de nodosa89p
 #SBATCH --ntasks=1               # cantidad de tareas
 #SBATCH --cpus-per-task=1        # cpu-cores por task 
