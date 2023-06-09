@@ -148,3 +148,4 @@ venv.bak/
 # Checkpoints
 # /checkpoints*/
 checkpoints_test/
+checkpoints_final/
