@@ -12,8 +12,7 @@ import sklearn.metrics as metrics
 
 from src.config import get_cfg_defaults
 from src.dataloader import ModelNet40
-from src.model.extractor import PointNet, PointNet2, DGCNN, DGCNN_ORIG, VN_PointNet, VN_DGCNN, VN_DGCNN_ORIG
-from src.model.extractor import cal_loss
+from src.model.extractor import cal_loss, get_model
 from src.utils.checkpoints import IOStream, SaveBestModel, checkpoint_init
 
 
@@ -21,26 +20,6 @@ from src.utils.checkpoints import IOStream, SaveBestModel, checkpoint_init
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 data_dir = os.path.join(BASE_DIR, 'data/extractor')
 
-
-
-def get_model(model_args):
-    if model_args.extractor == 'pointnet':
-        model = PointNet(model_args)
-    elif model_args.extractor == 'pointnet2':
-        model = PointNet2(model_args)
-    elif model_args.extractor == 'dgcnn':
-        model = DGCNN(model_args)
-    elif model_args.extractor == 'dgcnn_orig':
-        model = DGCNN_ORIG(model_args)
-    elif model_args.extractor == 'vn_pointnet':
-        model = VN_PointNet(model_args)
-    elif model_args.extractor == 'vn_dgcnn':
-        model = VN_DGCNN(model_args)
-    elif model_args.extractor == 'vn_dgcnn_orig':
-        model = VN_DGCNN_ORIG(model_args)
-    else:
-        raise Exception("Not implemented")
-    return model
 
 
 def train_step(model, train_loader, device, opt, criterion, epoch, io):
@@ -107,21 +86,20 @@ def train(args, io):
                               batch_size=args.exp.batch_size, shuffle=True, drop_last=True)
     test_loader = DataLoader(ModelNet40(partition='test', data_dir=data_dir, num_points=args.data.num_points), num_workers=8,
                              batch_size=args.exp.test_batch_size, shuffle=True, drop_last=False)
-    device = torch.device("cuda" if args.cuda else "cpu")
     
-    model = get_model(args.model).to(device)
+    model = get_model(args.model) # .to(device)
     total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     io.cprint(str(model))
     io.cprint(f'NUMBER OF TRAINABLE PARAMS: {total_params}')
 
-    model = nn.DataParallel(model)
+    # model = nn.DataParallel(model)
     print("Let's use", torch.cuda.device_count(), "GPUs!")
     
-    if args.model_path:
-        best_model_cp = torch.load(args.model_path)
-        best_model_epoch = best_model_cp['epoch']
-        model.load_state_dict(best_model_cp['model_state_dict'])
-        print(f"Best model loaded, its was saved at {best_model_epoch} epochs\n")
+    # if args.model.path:
+    #     best_model_cp = torch.load(args.model.path)
+    #     best_model_epoch = best_model_cp['epoch']
+    #     model.load_state_dict(best_model_cp['model_state_dict'])
+    #     print(f"Best model loaded, its was saved at {best_model_epoch} epochs\n")
     
     if args.opt.name == 'SGD':
         opt = optim.SGD(model.parameters(), lr=args.opt.lr, momentum=args.opt.gamma, weight_decay=args.opt.weight_decay)
@@ -158,16 +136,9 @@ def train(args, io):
 
 
 def test(args, io):
-    test_loader = DataLoader(ModelNet40(partition='test', data_dir=data_dir, num_points=args.data.num_points),
+    test_loader = DataLoader(ModelNet40(partition='train', data_dir=data_dir, num_points=args.data.num_points),
                              batch_size=args.exp.test_batch_size, shuffle=True, drop_last=False)
-    device = torch.device("cuda" if args.cuda else "cpu")
-    
-    model = get_model(args.model).to(device)
-    model = nn.DataParallel(model)
-    best_model_cp = torch.load(args.model_path)
-    best_model_epoch = best_model_cp['epoch']
-    model.load_state_dict(best_model_cp['model_state_dict'])
-    print(f"Best model loaded, its was saved at {best_model_epoch} epochs\n")
+    model = get_model(args.model)
     
     model = model.eval()
     torch.cuda.synchronize()
@@ -175,7 +146,7 @@ def test(args, io):
     test_loss, test_acc, test_acc_avg = test_step(model, test_loader, device, None, 'accum', io, log_loss=False)
     torch.cuda.synchronize()
     t1 = time.time()
-    time_str = "Test time: " + str((t1-t0) * 1000) + " ms \tDataset: " + str(len(test_loader.dataset)) + " \tForward time: " + str(((t1-t0) * 1000 / len(test_loader.dataset))) + "\n"
+    time_str = "Test time: " + str((t1-t0) * 1000) + " ms \tDataset: " + str(len(test_loader.dataset)) + " \tForward time: " + str((t1-t0) * 1000 / len(test_loader.dataset)) + "\n"
     io.cprint(time_str)
 
 
@@ -198,9 +169,9 @@ if __name__ == "__main__":
     cfg.merge_from_file(args.cfg_file)
     
     if args.model_path is None:
-        cfg.model_path = None
+        cfg.model.path = None
     else:
-        cfg.model_path = os.path.join(BASE_DIR, args.model_path)
+        cfg.model.path = os.path.join(BASE_DIR, args.model_path)
     print(cfg)
 
     exp_name = f'{cfg.exp.name}_{cfg.data.name}'

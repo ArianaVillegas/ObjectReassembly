@@ -4,7 +4,7 @@ import torch
 import os
 
 from torch.utils.data import Dataset
-from src_pt.utils.pcd import translate_pcd
+from src.dataloader.utils import transform
 
 all_data = None
 num_points = None
@@ -72,10 +72,8 @@ class BreakingBad(Dataset):
         left_pcd = self.data[left][:self.num_points]
         right_pcd = self.data[right][:self.num_points]
         if self.mode == 'train':
-            left_pcd = translate_pcd(left_pcd)
-            np.random.shuffle(left_pcd)
-            right_pcd = translate_pcd(right_pcd)
-            np.random.shuffle(right_pcd)
+            left_pcd = transform(left_pcd)
+            right_pcd = transform(right_pcd)
         return left_pcd, right_pcd, target
 
     def __len__(self):

@@ -1,0 +1,5 @@
+Namespace(cfg_file='config/extractor/train_extractor_dgcnn.yml', use_sgd=True, no_cuda=False, eval=True, model_path='checkpoints/dgcnn_2048_modelnet40/train/best_model_0.pth')
+Using GPU : 0 from 2 devices
+Test accum, loss: 0.000000, test acc: 0.929065, test avg acc: 0.896651
+Test time: 341436.407327652 ms 	Dataset: 9840 	Forward time: 34.69882188289146
+

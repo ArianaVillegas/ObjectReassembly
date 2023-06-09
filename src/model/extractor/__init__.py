@@ -4,3 +4,4 @@ from src.model.extractor.vn_pointnet import VN_PointNet
 from src.model.extractor.pointnet2 import PointNet2
 from src.model.extractor.pointnet import PointNet
 from src.model.extractor.loss import cal_loss
+from src.model.extractor.utils import get_model

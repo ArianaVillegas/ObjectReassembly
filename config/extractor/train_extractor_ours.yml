@@ -7,7 +7,7 @@ exp:
   log_interval: 1000
 
 model:
-  extractor: 'vn_dgcnn'
+  extractor: 'ours'
   dropout: 0.5
   loss: 'cal_loss'
   k: 20

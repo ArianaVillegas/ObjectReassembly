@@ -1,1 +1,1 @@
-from src.model.siamese import SiameseNet
+from src.model.mmn import MatchMakerNet
