@@ -2,7 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from src.model.extractor import get_model, get_graph_feature, vn_get_graph_feature
+from src.model.utils import get_model
+from src.model.extractor import get_graph_feature, vn_get_graph_feature
 
 class MatchMakerNet(nn.Module):
     def __init__(self, args):
@@ -29,14 +30,13 @@ class MatchMakerNet(nn.Module):
             self.extractor = get_model(self.args)
             if self.args.extractor == 'ours':
                 self.graph_ftr = get_graph_feature
-                
             elif self.args.extractor == 'vn_ours':
                 self.graph_ftr = vn_get_graph_feature
         else:
             raise Exception("Not implemented other feature extractors in MatchMakerNet")
         
     def extract_features(self, x):
-        output = self.extractor(x)
+        output = self.extractor(x, ext_ft=True)
         return output
         
     def forward(self, x1, x2):
@@ -44,11 +44,11 @@ class MatchMakerNet(nn.Module):
         output2 = self.extract_features(x2)
         output = torch.cat((output1, output2), dim=1)
         
-        output = get_graph_feature(output, k=self.args.k)
+        output = self.graph_ftr(output, k=self.args.k)
         output = self.conv_a(output)
         output_a = output.max(dim=-1, keepdim=False)[0]
         
-        output = get_graph_feature(output_a, k=self.args.k)
+        output = self.graph_ftr(output_a, k=self.args.k)
         output = self.conv_b(output)
         output_b = output.max(dim=-1, keepdim=False)[0]
         

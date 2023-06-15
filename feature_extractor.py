@@ -12,7 +12,8 @@ import sklearn.metrics as metrics
 
 from src.config import get_cfg_defaults
 from src.dataloader import ModelNet40
-from src.model.extractor import cal_loss, get_model
+from src.model import get_model
+from src.model.extractor import cal_loss
 from src.utils.checkpoints import IOStream, SaveBestModel, checkpoint_init
 
 
@@ -86,20 +87,13 @@ def train(args, io):
                               batch_size=args.exp.batch_size, shuffle=True, drop_last=True)
     test_loader = DataLoader(ModelNet40(partition='test', data_dir=data_dir, num_points=args.data.num_points), num_workers=8,
                              batch_size=args.exp.test_batch_size, shuffle=True, drop_last=False)
+    device = torch.device("cuda" if args.model.cuda else "cpu")
     
-    model = get_model(args.model) # .to(device)
+    model = get_model(args.model)
     total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     io.cprint(str(model))
     io.cprint(f'NUMBER OF TRAINABLE PARAMS: {total_params}')
-
-    # model = nn.DataParallel(model)
     print("Let's use", torch.cuda.device_count(), "GPUs!")
-    
-    # if args.model.path:
-    #     best_model_cp = torch.load(args.model.path)
-    #     best_model_epoch = best_model_cp['epoch']
-    #     model.load_state_dict(best_model_cp['model_state_dict'])
-    #     print(f"Best model loaded, its was saved at {best_model_epoch} epochs\n")
     
     if args.opt.name == 'SGD':
         opt = optim.SGD(model.parameters(), lr=args.opt.lr, momentum=args.opt.gamma, weight_decay=args.opt.weight_decay)
@@ -116,6 +110,8 @@ def train(args, io):
         scheduler = StepLR(opt, step_size=1, gamma=args.opt.gamma, verbose=True)
     elif args.opt.scheduler == 'CosineAnnealingLR':
         scheduler = CosineAnnealingLR(opt, args.exp.epochs, eta_min=args.opt.lr_min, verbose=True)
+    else:
+        raise Exception('Scheduler not implemented')
     io.cprint(str(opt))
     
     if args.model.loss == 'cal_loss':
@@ -136,8 +132,9 @@ def train(args, io):
 
 
 def test(args, io):
-    test_loader = DataLoader(ModelNet40(partition='train', data_dir=data_dir, num_points=args.data.num_points),
+    test_loader = DataLoader(ModelNet40(partition='test', data_dir=data_dir, num_points=args.data.num_points, rot=True),
                              batch_size=args.exp.test_batch_size, shuffle=True, drop_last=False)
+    device = torch.device("cuda" if args.model.cuda else "cpu")
     model = get_model(args.model)
     
     model = model.eval()
@@ -182,9 +179,9 @@ if __name__ == "__main__":
     io = IOStream('checkpoints/' + exp_name + path)
     io.cprint(str(args))
 
-    cfg.cuda = not args.no_cuda and torch.cuda.is_available()
+    cfg.model.cuda = not args.no_cuda and torch.cuda.is_available()
     torch.manual_seed(cfg.exp.seed)
-    if cfg.cuda:
+    if cfg.model.cuda:
         io.cprint(
             'Using GPU : ' + str(torch.cuda.current_device()) + ' from ' + str(torch.cuda.device_count()) + ' devices')
         torch.cuda.manual_seed(cfg.exp.seed)

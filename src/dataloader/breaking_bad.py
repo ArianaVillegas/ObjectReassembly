@@ -8,11 +8,11 @@ from src.dataloader.utils import transform
 
 all_data = None
 num_points = None
-def load_data(data_dir):
+def load_data(data_dir, subset):
     global all_data
     global num_points
     if all_data is None:
-        df = pd.read_pickle(os.path.join(data_dir, 'pcd.pkl'))
+        df = pd.read_pickle(os.path.join(data_dir, f'pcd_{subset}.pkl'))
         print(np.array(df['points'][df.index[0]]).shape)
         num_points = np.array(df['points'][df.index[0]]).shape[1]
         all_data = {row['label']: row['points'].reshape(num_points, 3) for _, row in df.iterrows()}
@@ -22,7 +22,7 @@ def load_data(data_dir):
 
 
 def load_pairs(data_dir, partition, args):
-    list_dir = os.path.join(data_dir, 'labels')
+    list_dir = os.path.join(data_dir, f'labels_matching_{args.subset}_improved')
     all_both = []
     cnt = 0
     for folder in os.listdir(list_dir):

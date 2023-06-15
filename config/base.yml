@@ -1,5 +1,5 @@
 exp:
-  name: 'vn_dgcnn_2048'
+  name: 'base'
   seed: 1
   epochs: 250
   batch_size: 32
@@ -7,9 +7,9 @@ exp:
   log_interval: 1000
 
 model:
-  extractor: 'vn_dgcnn'
+  extractor: 'our'
   dropout: 0.5
-  loss: 'cal_loss'
+  loss: 'bce_loss'
   k: 20
 
 data:

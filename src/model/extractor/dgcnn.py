@@ -83,7 +83,7 @@ class DGCNN(nn.Module):
             nn.Linear(64, output_channels)
         )
         
-    def forward(self, x):
+    def forward(self, x, ext_ft=False):
         batch_size = x.shape[0]
         
         x = get_graph_feature(x, k=self.k)
@@ -107,12 +107,13 @@ class DGCNN(nn.Module):
         x = self.conv5(x5)
         x = x.max(dim=-1, keepdim=False)[0]
 
-        x = self.conv6(x)
-        x1 = F.adaptive_max_pool1d(x, 1).view(batch_size, -1)
-        x2 = F.adaptive_avg_pool1d(x, 1).view(batch_size, -1)
-        x = torch.cat((x1, x2), 1)
+        if not ext_ft:
+            x = self.conv6(x)
+            x1 = F.adaptive_max_pool1d(x, 1).view(batch_size, -1)
+            x2 = F.adaptive_avg_pool1d(x, 1).view(batch_size, -1)
+            x = torch.cat((x1, x2), 1)
 
-        x = self.mlp(x)
+            x = self.mlp(x)
         
         return x
 

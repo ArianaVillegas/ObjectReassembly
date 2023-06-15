@@ -162,7 +162,7 @@ class VN_DGCNN(nn.Module):
         self.pool4 = mean_pool
         self.pool5 = mean_pool
 
-    def forward(self, x):
+    def forward(self, x, ext_ft=False):
         batch_size = x.size(0)
         x = x.unsqueeze(1)
         x = vn_get_graph_feature(x, k=self.k)
@@ -186,17 +186,18 @@ class VN_DGCNN(nn.Module):
         x = self.conv5(x5)
         x = self.pool5(x)
         
-        x = self.conv6(x)
-        num_points = x.size(-1)
-        x_mean = x.mean(dim=-1, keepdim=True).expand(x.size())
-        x = torch.cat((x, x_mean), 1)
-        x, trans = self.std_feature(x)
-        x = x.view(batch_size, -1, num_points)
-        
-        x1 = F.adaptive_max_pool1d(x, 1).view(batch_size, -1)
-        x2 = F.adaptive_avg_pool1d(x, 1).view(batch_size, -1)
-        x = torch.cat((x1, x2), 1)
+        if not ext_ft:
+            x = self.conv6(x)
+            num_points = x.size(-1)
+            x_mean = x.mean(dim=-1, keepdim=True).expand(x.size())
+            x = torch.cat((x, x_mean), 1)
+            x, trans = self.std_feature(x)
+            x = x.view(batch_size, -1, num_points)
+            
+            x1 = F.adaptive_max_pool1d(x, 1).view(batch_size, -1)
+            x2 = F.adaptive_avg_pool1d(x, 1).view(batch_size, -1)
+            x = torch.cat((x1, x2), 1)
 
-        x = self.mlp(x)
+            x = self.mlp(x)
         
         return x
