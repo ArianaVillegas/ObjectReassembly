@@ -1,5 +1,0 @@
-Namespace(cfg_file='config/extractor/train_extractor_pointnet2.yml', use_sgd=True, no_cuda=False, eval=True, model_path='checkpoints/pointnet2_2048_modelnet40/train/best_model_0.pth')
-Using GPU : 0 from 1 devices
-Test accum, loss: 0.000000, test acc: 0.861426, test avg acc: 0.815407
-Test time: 23866.307735443115 ms 	Dataset: 2468 	Forward time: 9.670302972221684
-

@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=vn_ours     # nombre del job
+#SBATCH --job-name=vn_ours3     # nombre del job
 #SBATCH --nodes=1                # cantidad de nodosa89p
 #SBATCH --ntasks=1               # cantidad de tareas
 #SBATCH --cpus-per-task=1        # cpu-cores por task 
-#SBATCH --mem=5G                # memoria total por nodo
+#SBATCH --mem=20G                # memoria total por nodo
 #SBATCH --gres=gpu:1             # numero de gpus por nodo
 #SBATCH --exclude=g001
 

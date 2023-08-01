@@ -2,14 +2,13 @@ from scipy.spatial.transform import Rotation as R
 import numpy as np
 
 
-def transform(pcd, eval):
+def transform(pcd):
     # Center pointcloud
     centroid = np.mean(pcd, axis=0)
     pcd = pcd - centroid[None]
     # Rotate pointcloud
-    if eval: # np.random.rand() > 0.3:
-        rot_mat = R.random().as_matrix()
-        pcd = (rot_mat @ pcd.T).T
+    rot_mat = R.random().as_matrix()
+    pcd = (rot_mat @ pcd.T).T
     # Translate pointcloud
     xyz1 = np.random.uniform(low=2./3., high=3./2., size=[3])
     xyz2 = np.random.uniform(low=-0.2, high=0.2, size=[3])  

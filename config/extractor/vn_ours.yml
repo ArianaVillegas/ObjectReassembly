@@ -1,5 +1,5 @@
 exp:
-  name: 'vn_ours_2048_400_adam'
+  name: 'vn_ours_2048'
   seed: 1
   epochs: 400
   batch_size: 32
@@ -21,6 +21,6 @@ opt:
   scheduler: 'CosineAnnealingLR'
   name: 'Adam'
   lr: 0.001
-  lr_min: 0.0001
+  lr_min: 0.00001
   gamma: 0.9
   weight_decay: 0.0001

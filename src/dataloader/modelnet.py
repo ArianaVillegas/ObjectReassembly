@@ -23,16 +23,16 @@ def load_data(partition, data_dir):
 
 
 class ModelNet40(Dataset):
-    def __init__(self, num_points, data_dir, partition='train', rot=False):
+    def __init__(self, num_points, data_dir, partition='train'):
         self.data, self.label = load_data(partition, data_dir)
         self.num_points = num_points
-        self.partition = partition  
-        self.rot = rot   
+        self.partition = partition
 
     def __getitem__(self, item):
         pointcloud = self.data[item][:self.num_points]
         label = self.label[item]
-        pointcloud = transform(pointcloud, self.rot)
+        if self.partition == 'train':
+            pointcloud = transform(pointcloud)
         return pointcloud, label
 
     def __len__(self):

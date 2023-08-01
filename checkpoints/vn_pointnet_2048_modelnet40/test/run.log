@@ -1,6 +1,0 @@
-Namespace(cfg_file='config/extractor/train_extractor_vn_pointnet.yml', use_sgd=True, no_cuda=False, eval=True, model_path='checkpoints/vn_pointnet_2048_modelnet40/train/best_model_0.pth')
-Using GPU : 0 from 2 devices
-Namespace(cfg_file='config/extractor/train_extractor_vn_pointnet.yml', use_sgd=True, no_cuda=False, eval=True, model_path='checkpoints/vn_pointnet_2048_modelnet40/train/best_model_0.pth')
-Using GPU : 0 from 2 devices
-Namespace(cfg_file='config/extractor/train_extractor_vn_pointnet.yml', use_sgd=True, no_cuda=False, eval=True, model_path='checkpoints/vn_pointnet_2048_modelnet40/train/best_model_0.pth')
-Using GPU : 0 from 2 devices
