@@ -60,7 +60,7 @@ cover/
 *.pot
 
 # Django stuff:
-*.log
+src/*.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -141,3 +141,11 @@ venv.bak/
 
 # mkdocs documentation
 /site
+
+# Dataset
+/data/extractor
+
+# Checkpoints
+# /checkpoints*/
+checkpoints_test/
+checkpoints_final/
